@@ -9,13 +9,13 @@ resource "unifi_client" "client" {
     site                        = var.endpoint.site
     allow_existing              = var.endpoint.client.allow_existing == null ? true : var.endpoint.client.allow_existing
     blocked                     = var.endpoint.client.blocked == null ? false : var.endpoint.client.blocked
-    group_id                    = var.endpoint.client.client_group == null ? null : data.unifi_client_group.client_group[0].id
+    groups                      = var.endpoint.client.groups
     fixed_ap_mac                = var.endpoint.client.fixed_ap_mac
     fixed_ip                    = var.endpoint.client.fixed_ip
     local_dns_record            = var.endpoint.client.fixed_ip == null ? null : var.endpoint.client.local_dns_record
-    network_members_group_ids   = var.endpoint.client.network_members_group_ids
     note                        = var.endpoint.client.note
     skip_forget_on_destroy      = var.endpoint.client.skip_forget_on_destroy == null ? false : var.endpoint.client.skip_forget_on_destroy
+    qos_rate                    = var.endpoint.client.qos_group_name == null ? null : {"id" = data.unifi_client_qos_rate.client_qos_rate[0].id}
 }
 
 resource "unifi_account" "account" {

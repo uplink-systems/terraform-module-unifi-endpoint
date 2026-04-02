@@ -1,7 +1,7 @@
 ## Module 'terraform-module-unifi-endpoint'
 
 > [!CAUTION]
-> The module is currently based on provider version 0.41.18. Because of the ongoing changes made by the provider's developers, especially changes to the <code>unifi_client</code> resource type, the module is currently always pinned to a fixed version and will be upgraded to features of newer provider versions gradually. To ensure backwards compatibility a branch is maintained for every previous provider version that affects the module and has breaking changes. Using the branch as module source allows to remain on a specific provider version for the module while using updated provider versions for the rest by specifying the version branch as module source. The branch names follow the naming conventions <code>provider-`<Version Number`></code>. Please expand the following section for supported provider versions.    
+> The module is currently based on provider version 0.41.24. Because of the ongoing provider changes made by developers and caused by the underlying API, especially changes to the <code>unifi_client</code> resource type, the module is currently always pinned to a fixed version and will be upgraded to features of newer provider versions gradually. To ensure backwards compatibility a branch is maintained for every previous provider version that affects the module and has breaking changes. Using the branch as module source allows to remain on a specific provider version for the module while using updated provider versions for the rest by specifying the version branch as module source. The branch names follow the naming conventions <code>provider-`<Version Number`></code>. Please expand the following section for supported provider versions.    
 
 <details>
 <summary><b>Available module branches with pinned provider versions</b></summary>
@@ -9,6 +9,7 @@
 #####
 
 The following branches - from newest to oldest - are currently available as module sources (add the matching line to code):
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.24"</code> for provider version 0.41.24 where the <code>unifi_client_group</code> resource was replaced with the <code>unifi_client_qos_rate</code> resource with impact on the <code>unifi_client</code> resource type (string attribute <code>client_group</code> replaced by <code>qos_rate</code> objects attribute).
 * <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.18"</code> for provider version 0.41.18 where again, major changes occured in version 0.41.13 but this version had bugs that were only fixed in 0.41.18
 * <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.4"</code> for provider version 0.41.4, which is at least needed to migrate to the new resource type names <code>unifi_client</code> and <code>unifi_client_group</code>
 * <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.3"</code> for provider versions up to 0.41.3., which maintains the legacy resource type names <code>unifi_user</code> and <code>unifi_user_group</code>
@@ -23,7 +24,7 @@ This module is intended to create and manage <code>unifi_client</code> resources
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.14.0 |
-| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | 0.41.18 |
+| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | 0.41.24 |
 
 ### Resources
 
@@ -36,7 +37,7 @@ This module is intended to create and manage <code>unifi_client</code> resources
   
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_client"></a> [endpoint](#input\_endpoint) | 'var.endpoint' is the main variable for unifi_client and unifi_account resources' attributes | <pre>type          = object({<br>  mac                     = string<br>  name                    = string<br>  network                 = optional(string, null)<br>  site                    = optional(string, "default")<br>  client                  = optional(object({<br>    allow_existing            = optional(bool, null)<br>    blocked                   = optional(bool, null)<br>    dev_id_override           = optional(number, null)<br>    fixed_ap_mac              = optional(string, null)<br>    fixed_ip                  = optional(string, null)<br>    local_dns_record          = optional(string, null)<br>    note                      = optional(string, null)<br>network_members_group_ids = optional(list(string), null)<br>    skip_forget_on_destroy    = optional(bool, null)<br>    client_group              = optional(string, null)<br>  }), {})<br>  account                 = optional(object({<br>    enabled                   = optional(bool, true)<br>    tunnel_medium_type        = optional(number, 6)<br>    tunnel_type               = optional(number, 13)<br>  }), { enabled = false })<br>})</pre> | none | yes |
+| <a name="input_client"></a> [endpoint](#input\_endpoint) | 'var.endpoint' is the main variable for unifi_client and unifi_account resources' attributes | <pre>type          = object({<br>  mac                     = string<br>  name                    = string<br>  network                 = optional(string, null)<br>  site                    = optional(string, "default")<br>  client                  = optional(object({<br>    allow_existing          = optional(bool, null)<br>    blocked                 = optional(bool, null)<br>    fixed_ap_mac            = optional(string, null)<br>    fixed_ip                = optional(string, null)<br>    local_dns_record        = optional(string, null)<br>    note                    = optional(string, null)<br>    groups                  = optional(list(string), null)<br>    qos_group_name          = optional(bool, null)<br>    skip_forget_on_destroy  = optional(bool, null)<br>  }), {})<br>  account                 = optional(object({<br>    enabled                   = optional(bool, true)<br>    tunnel_medium_type        = optional(number, 6)<br>    tunnel_type               = optional(number, 13)<br>  }), { enabled = false })<br>})</pre> | none | yes |
 
 ### Outputs
 
@@ -176,9 +177,10 @@ variable "endpoint" {
       blocked                   = optional(bool, false)
       fixed_ap_mac              = optional(string, null)
       fixed_ip                  = optional(string, null)
-      network_groups_member_ids = optional(list(string), null)
       local_dns_record          = optional(string, null)
+      groups                    = optional(list(string), null)
       note                      = optional(string, null)
+      qos_rate_group            = optional(string, null)
       skip_forget_on_destroy    = optional(bool, false)
     }
     account                 = optional(object({

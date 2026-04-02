@@ -11,13 +11,13 @@ variable "endpoint" {
     site                    = optional(string, "default")
     client                  = optional(object({
       allow_existing            = optional(bool, null)
-      blocked                   = optional(bool, null)
-      client_group              = optional(string, null)
+      blocked                   = optional(bool, null)       
+      groups                    = optional(list(string), null)
       fixed_ap_mac              = optional(string, null)
       fixed_ip                  = optional(string, null)
       local_dns_record          = optional(string, null)
       note                      = optional(string, null)
-      network_members_group_ids = optional(list(string), null)
+      qos_group_name            = optional(string, null)
       skip_forget_on_destroy    = optional(bool, null)
     }), {})
     account                 = optional(object({
