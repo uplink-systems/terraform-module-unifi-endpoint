@@ -2,9 +2,9 @@
 #   output.tf                                                                                      #
 ####################################################################################################
 
-output "unifi_user" {
-    value       = unifi_user.user
-    depends_on  = [ unifi_user.user ]
+output "unifi_client" {
+    value       = unifi_client.client
+    depends_on  = [ unifi_client.client ]
 }
 
 output "unifi_account" {

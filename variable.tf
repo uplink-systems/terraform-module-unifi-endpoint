@@ -9,7 +9,7 @@ variable "endpoint" {
     name                    = string
     network                 = optional(string, null)
     site                    = optional(string, "default")
-    user                    = optional(object({
+    client                  = optional(object({
       allow_existing          = optional(bool, null)
       blocked                 = optional(bool, null)
       dev_id_override         = optional(number, null)
@@ -17,7 +17,7 @@ variable "endpoint" {
       local_dns_record        = optional(string, null)
       note                    = optional(string, null)
       skip_forget_on_destroy  = optional(bool, null)
-      user_group              = optional(string, null)
+      client_group            = optional(string, null)
     }), {})
     account                 = optional(object({
       enabled                 = optional(bool, true)
@@ -34,10 +34,10 @@ variable "endpoint" {
     EOF
   }
   validation {
-    # check if var.endpoint.user.fixed_ip is null or contains a valid IPv4 value
-    condition     = var.endpoint.user.fixed_ip == null ? true : can(cidrnetmask(join("/", [var.endpoint.user.fixed_ip, "32"])))
+    # check if var.endpoint.client.fixed_ip is null or contains a valid IPv4 value
+    condition     = var.endpoint.client.fixed_ip == null ? true : can(cidrnetmask(join("/", [var.endpoint.client.fixed_ip, "32"])))
     error_message = <<-EOF
-      Value for 'var.endpoint.user.fixed_ip' is invalid: ${var.endpoint.user.fixed_ip == null ? 0 : var.endpoint.user.fixed_ip}
+      Value for 'var.endpoint.client.fixed_ip' is invalid: ${var.endpoint.client.fixed_ip == null ? 0 : var.endpoint.client.fixed_ip}
       Must be a valid address in IPv4 format or null only.
     EOF
   }

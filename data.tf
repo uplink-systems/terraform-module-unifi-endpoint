@@ -8,8 +8,8 @@ data "unifi_network" "network" {
     site  = var.endpoint.site
 }
 
-data "unifi_user_group" "user_group" {
-    count = var.endpoint.user.user_group == null ? 0 : 1
-    name  = var.endpoint.user.user_group
+data "unifi_client_group" "client_group" {
+    count = var.endpoint.client.client_group == null ? 0 : 1
+    name  = var.endpoint.client.client_group
     site  = var.endpoint.site
 }

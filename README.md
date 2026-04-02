@@ -1,15 +1,39 @@
 ## Module 'terraform-module-unifi-endpoint'
 
+> [!CAUTION]
+> The module is currently based on provider version 0.41.4. This version contains breaking changes that affect the usage of the module (if it is already in use): resource types <code>unifi_user</code> and <code>unifi_user_group</code> have been renamed to <code>unifi_client</code> and <code>unifi_client_group</code>. Therefore existing resources must be moved to the new resource types. 
+> Because of the ongoing changes made by the provider's developers, especially changes to the <code>unifi_client</code> resource type, the module is currently always pinned to a fixed version and will be upgraded to features of newer provider versions gradually. To ensure backwards compatibility a branch is maintained for every previous provider version that affects the module and has breaking changes. Using the branch as module source allows to remain on a specific provider version for the module while using updated provider versions for the rest by specifying the version branch as module source. The branch names follow the naming conventions <code>provider-`<Version Number`></code>. Please expand the following section for supported provider versions.   
+  
+<details>
+<summary><b>Available module branches with pinned provider versions</b></summary>
+
+#####
+
+The following branches - from newest to oldest - are currently available as module sources (add the matching line to code):
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.4"</code> for provider version 0.41.4, which is at least needed to migrate to the new resource type names <code>unifi_client</code> and <code>unifi_client_group</code>
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.3"</code> for provider versions up to 0.41.3., which maintains the legacy resource type names <code>unifi_user</code> and <code>unifi_user_group</code>
+</details>
+  
 ### Description
 
-This module is intended to create and manage <code>unifi_user</code> resources (client devices) on a Unifi Network Controller (either stand-alone or hosted on a UCG/UDM) following my business needs and standards. Optionally the module can create an associated <code>unifi_account</code> resource for authentication/authorization/accounting (AAA) for wired or wireless networks using UniFi gateway's built-in RADIUS server. It's not possible by design to create a <code>unifi_account</code> resource only without creating a related <code>unifi_user</code> resource. The other way round, this dependency also ensures that <code>unifi_account</code> resources are deleted automatically if their related <code>unifi_user</code> resource is deleted.   
+This module is intended to create and manage <code>unifi_client</code> resources on a Unifi Network Controller (either stand-alone or hosted on a UCG/UDM) following my business needs and standards. Optionally the module can create an associated <code>unifi_account</code> resource for authentication/authorization/accounting (AAA) for wired or wireless networks using UniFi gateway's built-in RADIUS server. It's not possible by design to create a <code>unifi_account</code> resource only without creating a related <code>unifi_client</code> resource. The other way round, this dependency also ensures that <code>unifi_account</code> resources are deleted automatically if their related <code>unifi_client</code> resource is deleted.   
+
+<details>
+<summary><b>Available module branches with pinned provider versions</b></summary>
+
+#####
+
+The following branches - from newest to oldest - are currently available as module sources (add the matching line to code):
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.4"</code> for provider version 0.41.4, which is at least needed to migrate to the new resource type names <code>unifi_client</code> and <code>unifi_client_group</code>
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.3"</code> for provider versions up to 0.41.3., which maintains the legacy resource type names <code>unifi_user</code> and <code>unifi_user_group</code>
+</details>
   
 ### Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.14.0 |
-| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | <= 0.41.3 |
+| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | 0.41.4 |
 
 ### Resources
 
@@ -22,13 +46,13 @@ This module is intended to create and manage <code>unifi_user</code> resources (
   
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_endpoint"></a> [endpoint](#input\_endpoint) | 'var.endpoint' is the main variable for unifi_user and unifi_account resources' attributes | <pre>type          = object({<br>  mac                     = string<br>  name                    = string<br>  network                 = optional(string, null)<br>  site                    = optional(string, "default")<br>  user                    = optional(object({<br>    allow_existing          = optional(bool, null)<br>    blocked                 = optional(bool, null)<br>    dev_id_override         = optional(number, null)<br>    fixed_ip                = optional(string, null)<br>    local_dns_record        = optional(string, null)<br>    note                    = optional(string, null)<br>    skip_forget_on_destroy  = optional(bool, null)<br>    user_group              = optional(string, null)<br>  }), {})<br>  account                 = optional(object({<br>    enabled                 = optional(bool, true)<br>    tunnel_medium_type      = optional(number, 6)<br>    tunnel_type             = optional(number, 13)<br>  }), { enabled = false })<br>})</pre> | none | yes |
+| <a name="input_client"></a> [endpoint](#input\_endpoint) | 'var.endpoint' is the main variable for unifi_client and unifi_account resources' attributes | <pre>type          = object({<br>  mac                     = string<br>  name                    = string<br>  network                 = optional(string, null)<br>  site                    = optional(string, "default")<br>  client                  = optional(object({<br>    allow_existing          = optional(bool, null)<br>    blocked                 = optional(bool, null)<br>    dev_id_override         = optional(number, null)<br>    fixed_ip                = optional(string, null)<br>    local_dns_record        = optional(string, null)<br>    note                    = optional(string, null)<br>    skip_forget_on_destroy  = optional(bool, null)<br>    client_group            = optional(string, null)<br>  }), {})<br>  account                 = optional(object({<br>    enabled                 = optional(bool, true)<br>    tunnel_medium_type      = optional(number, 6)<br>    tunnel_type             = optional(number, 13)<br>  }), { enabled = false })<br>})</pre> | none | yes |
 
 ### Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_unif_user"></a> [unifi\_user](#output\_unifi\_user) | list of all exported attributes values from the <code>unifi_user</code> resources (Client device)  |
+| <a name="output_unifi_client"></a> [unifi\_client](#output\_unifi\_client) | list of all exported attributes values from the <code>unifi_client</code> resources  |
 | <a name="output_unif_account"></a> [unifi\_account](#output\_unifi\_account) | list of all exported attributes values from the <code>unifi_account</code> resources (RADIUS account)  |
 
 ### Notes
@@ -47,7 +71,7 @@ terraform {
   required_providers {
     unifi           = {
       source  = "ubiquiti-community/unifi"
-      version = "= 0.41.3"
+      version = "0.41.4"
     }
     unifi-secondary-provider  = {
       <your secondary provider for UniFi resources>
@@ -64,7 +88,7 @@ provider "unifi-secondary-provider" = {
   <your secondary provider's settings>
 }
   
-module "unifi_endpointt"
+module "unifi_client"
   for_each    = ...
   source      = ...
   <Module-specific inputs>
@@ -92,7 +116,7 @@ terraform {
     }
     unifi-secondary-provider  = {
       source  = "ubiquiti-community/unifi"
-      version = "0.41.3"
+      version = "0.41.4"
     }
   }
 }
@@ -106,7 +130,7 @@ provider "unifi-secondary-provider" = {
   ...
 }
   
-module "unifi_endpoint"
+module "unifi_client"
   for_each    = ...
   source      = ...
   <Module-specific inputs>
@@ -126,16 +150,16 @@ resource "unifi_setting_usg" "setting_usg_2"
 The module can create/manage both, a client device and an associated account for AAA. A UniFi gateway with an enabled built-in RADIUS server must be setup to create associated accounts. Leave the account attributes unconfigured to skip account creation or if a 3rd party gateway is used.  
 
 <details>
-<summary><b>Using the <i>endpoint.account</i> parameters</b></summary>
+<summary><b>Using the <i>client.account</i> parameters</b></summary>
 
 #####
-The *endpoint.account* parameters specify the settings for the *unifi_account* resource. If you want to create an account for RADIUS authentication and VLAN assignment only, you only need to set the parameter *endpoint.account.enable* to *true*. The other required parameter values are configured with matching values for this scenario. If you want to configure another type of *unifi_account* you can specify the related parameters instead; *endpoint.account.enable* is set to *true* automatically in this case.
+The *client.account* parameters specify the settings for the *unifi_account* resource. If you want to create an account for RADIUS authentication and VLAN assignment only, you only need to set the parameter *client.account.enable* to *true*. The other required parameter values are configured with matching values for this scenario. If you want to configure another type of *unifi_account* you can specify the related parameters instead; *client.account.enable* is set to *true* automatically in this case.
 </details>
   
 #####
-The provider requires that the attributes <code>network_id</code> and <code>user_group_id</code> contain the UniFi-internal ID of the network / user group. However, the name of the objects must be specified in the module variable instead, because it has a built-in feature to transform these names to their corresponding IDs using data sources. That's why the variable's attributes in the module are labeled as <code>network</code> and <code>user_group</code> for better understanding.  
+The provider requires that the attributes <code>network_id</code> contains the UniFi-internal ID of the network / user group. However, the name of the objects must be specified in the module variable instead, because it has a built-in feature to transform these names to their corresponding IDs using data sources. That's why the variable's attributes in the module are labeled as <code>network</code> for better understanding.  
   
-The provided mac address is used for both resources, <code>unifi_user</code> and <code>unifi_account</code>. UniFi currently allows several formats for Wireless MAC authentication but only one format Wired MAC authentication ("*AABBCCDDEEFF*"). To setup and use <code>unifi_account</code> resources for both, wired and wireless MAC authentication, the module converts the mac address to this format for username/password.  
+The provided mac address is used for both resources, <code>unifi_client</code> and <code>unifi_account</code>. UniFi currently allows several formats for Wireless MAC authentication but only one format Wired MAC authentication ("*AABBCCDDEEFF*"). To setup and use <code>unifi_account</code> resources for both, wired and wireless MAC authentication, the module converts the mac address to this format for username/password.  
   
 The attribute <code>fixed_ip</code> can only be used in environments with a UniFi Gateway or a UniFi layer-3 switch. Otherwise the resource will fail to create if not null.  
   
@@ -160,12 +184,12 @@ variable "endpoint" {
     user                    = {
       allow_existing          = optional(bool, true)
       blocked                 = optional(bool, false)
-      dev_id_override         = optional(number, null)
+      fixed_ap_mac            = optional(string, null)
       fixed_ip                = optional(string, null)
+      groups                  = optional(list(string), null)
       local_dns_record        = optional(string, null)
       note                    = optional(string, null)
       skip_forget_on_destroy  = optional(bool, false)
-      user_group              = optional(string, null)
     }
     account                 = optional(object({
       enabled                 = optional(bool, null)
