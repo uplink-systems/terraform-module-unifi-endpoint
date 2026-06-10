@@ -24,7 +24,9 @@ resource "unifi_account" "account" {
     password                    = upper(join("", (split(":", var.endpoint.mac))))
     network_id                  = var.endpoint.network == null ? null : data.unifi_network.network[0].id
     site                        = var.endpoint.site
+    tunnel_config_type          = var.endpoint.account.tunnel_config_type
     tunnel_medium_type          = var.endpoint.account.tunnel_medium_type
     tunnel_type                 = var.endpoint.account.tunnel_type
+    vlan                        = var.endpoint.account.vlan
     depends_on                  = [ unifi_client.client ]
 }

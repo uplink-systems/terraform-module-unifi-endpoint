@@ -35,3 +35,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Include all .tfvars files in 'examples' folder and subfolders as they are
+# used for module documentation purposes and do not contain 'real' data.
+!/examples/**/*.tfvars

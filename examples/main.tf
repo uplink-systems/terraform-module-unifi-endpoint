@@ -21,8 +21,10 @@ variable "endpoint" {
     }
     account   = optional(object({
       enabled                   = optional(bool, true)
+      tunnel_config_type        = optional(string, null)
       tunnel_medium_type        = optional(number, null)
       tunnel_type               = optional(number, null)
+      vlan                      = optional(number, null)
     }), { enabled = false })
   }))
 }

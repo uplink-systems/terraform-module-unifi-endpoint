@@ -1,7 +1,7 @@
 ## Module 'terraform-module-unifi-endpoint'
 
 > [!CAUTION]
-> The module is currently based on provider version 0.41.24. Because of the ongoing provider changes made by developers and caused by the underlying API, especially changes to the <code>unifi_client</code> resource type, the module is currently always pinned to a fixed version and will be upgraded to features of newer provider versions gradually. To ensure backwards compatibility a branch is maintained for every previous provider version that affects the module and has breaking changes. Using the branch as module source allows to remain on a specific provider version for the module while using updated provider versions for the rest by specifying the version branch as module source. The branch names follow the naming conventions <code>provider-`<Version Number`></code>. Please expand the following section for supported provider versions.    
+> The module is currently based on provider version 0.43.0. Because of the ongoing provider changes made by developers and caused by the underlying API, especially changes to the <code>unifi_client</code> resource type, the module is currently always pinned to a fixed version and will be upgraded to features of newer provider versions gradually. To ensure backwards compatibility a branch is maintained for every previous provider version that affects the module and has breaking changes. Using the branch as module source allows to remain on a specific provider version for the module while using updated provider versions for the rest by specifying the version branch as module source. The branch names follow the naming conventions <code>provider-`<Version Number`></code>. Please expand the following section for supported provider versions.    
 
 <details>
 <summary><b>Available module branches with pinned provider versions</b></summary>
@@ -9,6 +9,7 @@
 #####
 
 The following branches - from newest to oldest - are currently available as module sources (add the matching line to code):
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.43.0"</code> for provider version 0.43.0 where the <code>unifi_account</code> resource was fixed to accept <code>tunnel_type</code> 13 again. In addition, setting a VLAN ID for a <code>unifi_account</code> resource was added in 0.42.0 and supported in this module version.
 * <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.24"</code> for provider version 0.41.24 where the <code>unifi_client_group</code> resource was replaced with the <code>unifi_client_qos_rate</code> resource with impact on the <code>unifi_client</code> resource type (string attribute <code>client_group</code> replaced by <code>qos_rate</code> objects attribute).
 * <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.18"</code> for provider version 0.41.18 where again, major changes occured in version 0.41.13 but this version had bugs that were only fixed in 0.41.18
 * <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.4"</code> for provider version 0.41.4, which is at least needed to migrate to the new resource type names <code>unifi_client</code> and <code>unifi_client_group</code>
@@ -24,7 +25,7 @@ This module is intended to create and manage <code>unifi_client</code> resources
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.14.0 |
-| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | 0.41.24 |
+| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | 0.43.0 |
 
 ### Resources
 
@@ -37,14 +38,14 @@ This module is intended to create and manage <code>unifi_client</code> resources
   
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_client"></a> [endpoint](#input\_endpoint) | 'var.endpoint' is the main variable for unifi_client and unifi_account resources' attributes | <pre>type          = object({<br>  mac                     = string<br>  name                    = string<br>  network                 = optional(string, null)<br>  site                    = optional(string, "default")<br>  client                  = optional(object({<br>    allow_existing          = optional(bool, null)<br>    blocked                 = optional(bool, null)<br>    fixed_ap_mac            = optional(string, null)<br>    fixed_ip                = optional(string, null)<br>    local_dns_record        = optional(string, null)<br>    note                    = optional(string, null)<br>    groups                  = optional(list(string), null)<br>    qos_group_name          = optional(bool, null)<br>    skip_forget_on_destroy  = optional(bool, null)<br>  }), {})<br>  account                 = optional(object({<br>    enabled                   = optional(bool, true)<br>    tunnel_medium_type        = optional(number, 6)<br>    tunnel_type               = optional(number, 13)<br>  }), { enabled = false })<br>})</pre> | none | yes |
+| <a name="input_client"></a> [endpoint](#input\_endpoint) | 'var.endpoint' is the main variable for unifi_client and unifi_account resources' attributes | <pre>type          = object({<br>  mac                     = string<br>  name                    = string<br>  network                 = optional(string, null)<br>  site                    = optional(string, "default")<br>  client                  = optional(object({<br>    allow_existing          = optional(bool, null)<br>    blocked                 = optional(bool, null)<br>    fixed_ap_mac            = optional(string, null)<br>    fixed_ip                = optional(string, null)<br>    local_dns_record        = optional(string, null)<br>    note                    = optional(string, null)<br>    groups                  = optional(list(string), null)<br>    qos_group_name          = optional(bool, null)<br>    skip_forget_on_destroy  = optional(bool, null)<br>  }), {})<br>  account                 = optional(object({<br>    enabled                   = optional(bool, true)<br>    tunnel_config_type        = optional(string, null)<br>    tunnel_medium_type        = optional(number, 6)<br>    tunnel_type               = optional(number, 13)<br>    vlan                      = optional(number, null)<br>  }), { enabled = false })<br>})</pre> | none | yes |
 
 ### Outputs
 
 | Name | Description |
 |------|-------------|
 | <a name="output_unifi_client"></a> [unifi\_client](#output\_unifi\_client) | list of all exported attributes values from the <code>unifi_client</code> resources  |
-| <a name="output_unif_account"></a> [unifi\_account](#output\_unifi\_account) | list of all exported attributes values from the <code>unifi_account</code> resources (RADIUS account)  |
+| <a name="output_unifi_account"></a> [unifi\_account](#output\_unifi\_account) | list of all exported attributes values from the <code>unifi_account</code> resources (RADIUS account)  |
 
 ### Notes
   
@@ -62,7 +63,7 @@ terraform {
   required_providers {
     unifi           = {
       source  = "ubiquiti-community/unifi"
-      version = "0.41.4"
+      version = "0.43.0"
     }
     unifi-secondary-provider  = {
       <your secondary provider for UniFi resources>
@@ -107,7 +108,7 @@ terraform {
     }
     unifi-secondary-provider  = {
       source  = "ubiquiti-community/unifi"
-      version = "0.41.4"
+      version = "0.43.0"
     }
   }
 }
@@ -141,10 +142,10 @@ resource "unifi_setting_usg" "setting_usg_2"
 The module can create/manage both, a client device and an associated account for AAA. A UniFi gateway with an enabled built-in RADIUS server must be setup to create associated accounts. Leave the account attributes unconfigured to skip account creation or if a 3rd party gateway is used.  
 
 <details>
-<summary><b>Using the <i>client.account</i> parameters</b></summary>
+<summary><b>Using the <i>endpoint.account</i> parameters</b></summary>
 
 #####
-The *client.account* parameters specify the settings for the *unifi_account* resource. If you want to create an account for RADIUS authentication and VLAN assignment only, you only need to set the parameter *client.account.enable* to *true*. The other required parameter values are configured with matching values for this scenario. If you want to configure another type of *unifi_account* you can specify the related parameters instead; *client.account.enable* is set to *true* automatically in this case.
+The *endpoint.account* parameters specify the settings for the *unifi_account* resource. If you want to create an account for RADIUS authentication and VLAN assignment only, you only need to set the parameter *endpoint.account.enable* to *true*. The other required parameter values are configured with matching values for this scenario. If you want to configure another type of *unifi_account* you can specify the related parameters instead; *endpoint.account.enable* is set to *true* automatically in this case.
 </details>
   
 #####
@@ -185,8 +186,10 @@ variable "endpoint" {
     }
     account                 = optional(object({
       enabled                   = optional(bool, null)
+      tunnel_config_type        = optional(string, null)
       tunnel_medium_type        = optional(number, null)
       tunnel_type               = optional(number, null)
+      vlan                      = optional(number, null)
     }))
   }))
 }
