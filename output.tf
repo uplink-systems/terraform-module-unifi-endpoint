@@ -7,7 +7,7 @@ output "unifi_client" {
     depends_on  = [ unifi_client.client ]
 }
 
-output "unifi_account" {
-    value       = unifi_account.account
-    depends_on  = [ unifi_account.account ]
+output "unifi_radius_user" {
+    value       = unifi_radius_user.radius_user
+    depends_on  = [ unifi_radius_user.radius_user ]
 }

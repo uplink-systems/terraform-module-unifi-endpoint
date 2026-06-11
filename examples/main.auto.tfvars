@@ -23,7 +23,7 @@ endpoint = {
       note              = "Laptop of the Big Boss"
       qos_group_name    = "laptops"
     }
-    account           = {
+    radius_user       = {
       enabled           = true
       vlan              = 2
     }

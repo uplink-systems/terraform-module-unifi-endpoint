@@ -18,15 +18,15 @@ resource "unifi_client" "client" {
     qos_rate                    = var.endpoint.client.qos_group_name == null ? null : {"id" = data.unifi_client_qos_rate.client_qos_rate[0].id}
 }
 
-resource "unifi_account" "account" {
-    count                       = var.endpoint.account.enabled ? 1 : 0
+resource "unifi_radius_user" "radius_user" {
+    count                       = var.endpoint.radius_user.enabled ? 1 : 0
     name                        = upper(join("", (split(":", var.endpoint.mac))))
     password                    = upper(join("", (split(":", var.endpoint.mac))))
     network_id                  = var.endpoint.network == null ? null : data.unifi_network.network[0].id
     site                        = var.endpoint.site
-    tunnel_config_type          = var.endpoint.account.tunnel_config_type
-    tunnel_medium_type          = var.endpoint.account.tunnel_medium_type
-    tunnel_type                 = var.endpoint.account.tunnel_type
-    vlan                        = var.endpoint.account.vlan
+    tunnel_config_type          = var.endpoint.radius_user.tunnel_config_type
+    tunnel_medium_type          = var.endpoint.radius_user.tunnel_medium_type
+    tunnel_type                 = var.endpoint.radius_user.tunnel_type
+    vlan                        = var.endpoint.radius_user.vlan
     depends_on                  = [ unifi_client.client ]
 }

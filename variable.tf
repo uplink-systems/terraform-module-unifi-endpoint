@@ -20,7 +20,7 @@ variable "endpoint" {
       qos_group_name            = optional(string, null)
       skip_forget_on_destroy    = optional(bool, null)
     }), {})
-    account                 = optional(object({
+    radius_user               = optional(object({
       enabled                   = optional(bool, true)
       tunnel_config_type        = optional(string, null)
       tunnel_medium_type        = optional(number, 6)

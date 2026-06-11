@@ -8,7 +8,7 @@ variable "endpoint" {
     name      = string
     network   = optional(string, null)
     site      = optional(string, null)
-    client    = {
+    client      = {
       allow_existing            = optional(bool, null)
       blocked                   = optional(bool, null)
       fixed_ap_mac              = optional(string, null)
@@ -19,7 +19,7 @@ variable "endpoint" {
       qos_group_name            = optional(string, null)
       skip_forget_on_destroy    = optional(bool, null)
     }
-    account   = optional(object({
+    radius_user = optional(object({
       enabled                   = optional(bool, true)
       tunnel_config_type        = optional(string, null)
       tunnel_medium_type        = optional(number, null)
