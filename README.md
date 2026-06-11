@@ -26,7 +26,7 @@ This module is intended to create and manage <code>unifi_client</code> resources
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.14.0 |
-| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | 0.43.0 |
+| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | 0.43.1 |
 
 ### Resources
 
@@ -64,7 +64,7 @@ terraform {
   required_providers {
     unifi           = {
       source  = "ubiquiti-community/unifi"
-      version = "0.43.0"
+      version = "0.43.1"
     }
     unifi-secondary-provider  = {
       <your secondary provider for UniFi resources>
@@ -109,7 +109,7 @@ terraform {
     }
     unifi-secondary-provider  = {
       source  = "ubiquiti-community/unifi"
-      version = "0.43.0"
+      version = "0.43.1"
     }
   }
 }
