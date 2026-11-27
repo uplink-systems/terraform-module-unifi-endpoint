@@ -1,22 +1,5 @@
 ## Module 'terraform-module-unifi-endpoint'
 
-> [!CAUTION]
-> The module is currently based on provider version 0.43.1. Because of the ongoing provider changes made by developers and caused by the underlying API, the module is currently always pinned to a fixed version and will be upgraded to features of newer provider versions gradually. To ensure backwards compatibility a branch is maintained for every previous provider version that affects the module and has breaking changes. Using the branch as module source allows to remain on a specific provider version for the module while using updated provider versions for the rest by specifying the version branch as module source. The branch names follow the naming conventions <code>provider-`<Version Number`></code>. Please expand the following section for supported provider versions.    
-
-<details>
-<summary><b>Available module branches with pinned provider versions</b></summary>
-
-#####
-
-The following branches - from newest to oldest - are currently available as module sources (add the matching line to code):
-* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.43.1"</code> for provider version 0.43.1 which implements move resource state support for legacy <code>unifi_account</code> resource type to <code>unifi_radius_user</code> resource type.
-* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.43.0"</code> for provider version 0.43.0 where the <code>unifi_account</code> resource was fixed to accept <code>tunnel_type</code> 13 again. In addition, setting a VLAN ID for a <code>unifi_account</code> resource was added in 0.42.0 and supported in this module version.
-* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.24"</code> for provider version 0.41.24 where the <code>unifi_client_group</code> resource was replaced with the <code>unifi_client_qos_rate</code> resource with impact on the <code>unifi_client</code> resource type (string attribute <code>client_group</code> replaced by <code>qos_rate</code> objects attribute).
-* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.18"</code> for provider version 0.41.18 where again, major changes occured in version 0.41.13 but this version had bugs that were only fixed in 0.41.18
-* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.4"</code> for provider version 0.41.4, which is at least needed to migrate to the new resource type names <code>unifi_client</code> and <code>unifi_client_group</code>
-* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.3"</code> for provider versions up to 0.41.3., which maintains the legacy resource type names <code>unifi_user</code> and <code>unifi_user_group</code>
-</details>
-  
 ### Description
 
 This module is intended to create and manage <code>unifi_client</code> resources on a Unifi Network Controller (either stand-alone or hosted on a UCG/UDM) following my business needs and standards. Optionally the module can create an associated <code>unifi_radius_user</code> resource for authentication/authorization/accounting (AAA) for wired or wireless networks using UniFi gateway's built-in RADIUS server. It's not possible by design to create a <code>unifi_radius_user</code> resource only without creating a related <code>unifi_client</code> resource. The other way round, this dependency also ensures that <code>unifi_radius_user</code> resources are deleted automatically if their related <code>unifi_client</code> resource is deleted.   
@@ -25,8 +8,8 @@ This module is intended to create and manage <code>unifi_client</code> resources
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.14.0 |
-| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | 0.43.1 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.15.0 |
+| <a name="requirement_unifi"></a> [ubiquiti-community\/unifi](#requirement\_ubiquiti-commpunity\_unifi) | 0.59.0 |
 
 ### Resources
 
@@ -208,3 +191,22 @@ module "endpoint" {
 Known issues are documented with the GitHub repo's issues functionality. Please filter the issues by **Types** and select **Known Issue** to get the appropriate issues and read the results carefully before using the module to avoid negative impacts on your infrastructure.  
   
 <a name="known_issues"></a> [list of Known Issues](https://github.com/uplink-systems/terraform-module-unifi-endpoint/issues?q=type%3A%22known%20issue%22)  
+  
+
+> [!NOTE]
+> The module is currently based on provider version 0.59.0. Because of the ongoing provider changes made by developers and caused by the underlying API, the module is currently always pinned to a fixed version and will be upgraded to features of newer provider versions gradually. To ensure backwards compatibility a branch is maintained for every previous provider version that affects the module and has breaking changes. Using the branch as module source allows to remain on a specific provider version for the module while using updated provider versions for the rest by specifying the version branch as module source. The branch names follow the naming conventions <code>provider-`<Version Number`></code>. Please expand the following section for supported provider versions.    
+
+<details>
+<summary><b>Available module branches with pinned provider versions</b></summary>
+
+#####
+
+The following branches - from newest to oldest - are currently available as module sources (add the matching line to code):
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.59.0"</code> for provider version 0.59.0 which implements list resources for <code>unifi_radius</code>, <code>unifi_client</code> (resp. in 0.50.0), new <code>last_ip</code> read-only attribute for <code>unifi_client</code> resources (resp. in 0.51.0) and a related fix for this attribute (resp. in 0.56.0).
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.43.1"</code> for provider version 0.43.1 which implements move resource state support for legacy <code>unifi_account</code> resource type to <code>unifi_radius_user</code> resource type.
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.43.0"</code> for provider version 0.43.0 where the <code>unifi_account</code> resource was fixed to accept <code>tunnel_type</code> 13 again. In addition, setting a VLAN ID for a <code>unifi_account</code> resource was added in 0.42.0 and supported in this module version.
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.24"</code> for provider version 0.41.24 where the <code>unifi_client_group</code> resource was replaced with the <code>unifi_client_qos_rate</code> resource with impact on the <code>unifi_client</code> resource type (string attribute <code>client_group</code> replaced by <code>qos_rate</code> objects attribute).
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.18"</code> for provider version 0.41.18 where again, major changes occured in version 0.41.13 but this version had bugs that were only fixed in 0.41.18
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.4"</code> for provider version 0.41.4, which is at least needed to migrate to the new resource type names <code>unifi_client</code> and <code>unifi_client_group</code>
+* <code>source = "github.com/uplink-systems/terraform-module-unifi-endpoint?ref=provider-v0.41.3"</code> for provider versions up to 0.41.3., which maintains the legacy resource type names <code>unifi_user</code> and <code>unifi_user_group</code>
+</details>

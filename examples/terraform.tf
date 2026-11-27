@@ -3,11 +3,11 @@
 ####################################################################################################
 
 terraform {
-  required_version = ">= 1.14.0"
+  required_version = ">= 1.15.0"
   required_providers {
     unifi = {
       source  = "ubiquiti-community/unifi"
-      version = "0.43.1"
+      version = "0.59.0"
     }
   }
 }
